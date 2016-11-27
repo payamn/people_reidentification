@@ -52,9 +52,9 @@ int main (int argc, char** argv)
       return (-1);
    }
 
-   float min_z = 1000.0;
-   float min_x = 1000.0;
-   float min_y = 1000.0;
+   float min_z = INFINITY;
+   float min_x = INFINITY;
+   float min_y = INFINITY;
    float max_x = -INFINITY;
    float max_y = -INFINITY;
    float max_z = -INFINITY;
@@ -82,47 +82,7 @@ int main (int argc, char** argv)
       }
    }
 
-   cv::Mat rgbImage(400, 400, CV_8UC3);
-   for (b1 = cloud->points.begin(); b1 < cloud->points.end(); b1++)
-   {
-      int i = (b1->x - min_x) / (max_x - min_x) * 399;
-      int j = (b1->y - min_y) / (max_y - min_y) * 399;
-
-      int r = b1->r; // (b1->x - min_x) / (max_x - min_x) * 255;
-      int g = b1->g; // (b1->y - min_y) / (max_y - min_y) * 255;
-      int b = b1->b; // (b1->z - min_z) / (max_z - min_z) * 255;
-      rgbImage.at<cv::Vec3b> (j, i) = cv::Vec3b(r, g, b);
-   }
-
-
-   int erosion_elem = 1;
-   int erosion_size = 1;
-   int const max_elem = 2;
-   int const max_kernel_size = 21;
-   int erosion_type;
-   if( erosion_elem == 0 ){ erosion_type = cv::MORPH_RECT; }
-   else if( erosion_elem == 1 ){ erosion_type = cv::MORPH_CROSS; }
-   else if( erosion_elem == 2) { erosion_type = cv::MORPH_ELLIPSE; }
-
-   cv::Mat element = cv::getStructuringElement( erosion_type,
-                                       cv::Size( 2*erosion_size + 1, 2*erosion_size+1 ),
-                                       cv::Point( erosion_size, erosion_size ) );
-
-   cv::Mat erosion_dst;
-   /// Apply the erosion operation
-   cv::erode(rgbImage, erosion_dst, element );
-   cv::imshow( "Erosion Demo", erosion_dst );
-   cv::waitKey(0);
-
-   return 0;
-
-
-   cv::imshow("image", rgbImage);
-   cv::waitKey(0);
-
-
-
-   cv::Mat image(400, 400, CV_8UC1);
+   cv::Mat image(400, 400, CV_8UC1, cv::Scalar::all(0));
    for (b1 = cloud->points.begin(); b1 < cloud->points.end(); b1++)
    {
       int i = (b1->x - min_x) / (max_x - min_x) * 399;
