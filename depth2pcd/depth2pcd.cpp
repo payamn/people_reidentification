@@ -80,8 +80,10 @@ int main( int argc, char *argv[] ) {
    cv::FileStorage fs2(camera_info_path, cv::FileStorage::READ);
 
    cv::Mat cameraMatrix, distCoeffs;
-   fs2["cameraMatrix"] >> cameraMatrix;
-   fs2["distCoeffs"] >> distCoeffs;
+   fs2["Camera_1"]["K"] >> cameraMatrix;
+   fs2["Camera_1"]["Dist"] >> distCoeffs;
+
+   std::cout << distCoeffs << std::endl;
 
    const float depth_factor = 1000; // mapping from png depth value to metric scale
 
@@ -104,9 +106,6 @@ int main( int argc, char *argv[] ) {
       CV_LOAD_IMAGE_COLOR
    );
 
-   cv::Mat new_rgb_image;
-
-   // cv::undistort(rgb_image, new_rgb_image, cameraMatrix, distCoeffs);
    depth_image.convertTo( depth_image, CV_32F ); // convert the image data to float type
    // rgb_image.convertTo( rgb_image, CV_32F); // convert the image data to float type
 
@@ -118,6 +117,14 @@ int main( int argc, char *argv[] ) {
    if(!rgb_image.data){
       std::cerr << "No RGB data!!!" << std::endl;
       exit(EXIT_FAILURE);
+   }
+
+   std::cout << distCoeffs;
+   // undistort the rgb image
+   {
+       cv::Mat temp_image;
+       cv::undistort(rgb_image, temp_image, cameraMatrix, distCoeffs);
+       temp_image.copyTo(rgb_image);
    }
 
 
