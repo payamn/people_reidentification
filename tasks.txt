@@ -1,0 +1,10 @@
+1. checkout all datasets
+2. complete the code of person detection based on PCL ground plane people detection app
+3. NITE library -> run on the kinect (online)
+4. NITE library -> possibilty of running for offline data (we can create video of the pcd files oci, and pass it to the app)
+5. GPU people detection based on PCL
+6. data transformation for off file
+7. data transformation for occupancy grid
+
+TODO:
+- run preprocessing (using ground plane people detection) on MHAD dataset
