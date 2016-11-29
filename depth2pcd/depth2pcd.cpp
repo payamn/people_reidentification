@@ -83,8 +83,6 @@ int main( int argc, char *argv[] ) {
    fs2["Camera_1"]["K"] >> cameraMatrix;
    fs2["Camera_1"]["Dist"] >> distCoeffs;
 
-   std::cout << distCoeffs << std::endl;
-
    const float depth_factor = 1000; // mapping from png depth value to metric scale
 
    // TODO load these constant from the cameraMatrix
@@ -119,7 +117,6 @@ int main( int argc, char *argv[] ) {
       exit(EXIT_FAILURE);
    }
 
-   std::cout << distCoeffs;
    // undistort the rgb image
    {
        cv::Mat temp_image;
@@ -143,9 +140,9 @@ int main( int argc, char *argv[] ) {
       for(int u = 0; u < depth_image.cols; u++) {
          float depth  = depth_image.at<float>(v,u) / depth_factor;
           
-         float z = depth;
-         float x = depth*(u-px_d)/fx_d;
-         float y = depth*(v-py_d)/fy_d;
+         float x = depth;
+         float y = -depth*(u-px_d)/fx_d;
+         float z = -depth*(v-py_d)/fy_d;
            
          cloud(u,v).x = x;
          cloud(u,v).y = y;
