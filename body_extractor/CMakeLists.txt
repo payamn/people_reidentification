@@ -11,3 +11,6 @@ target_link_libraries (extractor ${PCL_LIBRARIES})
 
 add_executable (detector MACOSX_BUNDLE people.cpp)
 target_link_libraries (detector ${PCL_LIBRARIES})
+
+add_executable (ground_plane_extractor MACOSX_BUNDLE ground_plane_extractor.cpp)
+target_link_libraries (ground_plane_extractor ${PCL_LIBRARIES})
